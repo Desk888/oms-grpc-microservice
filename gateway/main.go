@@ -26,13 +26,13 @@ func main() {
 	defer conn.Close()
 
 	c := pb.NewOrderServiceClient(conn)
-	log.Println("Connected to order service")
+	log.Println("Dialing order service on", OrderServiceAddr)
 
 	router := mux.NewRouter()
 	handler := NewHandler(c)
 	handler.RegisterRoutes(router)
 
-	log.Println("starting server on", httpAddr)
+	log.Println("Starting server on", httpAddr)
 	
 	if err := http.ListenAndServe(httpAddr, router); err != nil {
 		log.Fatal("failed to listen and serve: ", err)
