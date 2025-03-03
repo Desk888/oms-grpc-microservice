@@ -1,20 +1,35 @@
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
+
 	"github.com/Desk888/common"
-	_ "github.com/joho/godotenv/autoload"
 	"github.com/gorilla/mux"
+	_ "github.com/joho/godotenv/autoload"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
+	pb "github.com/Desk888/common/api"
 )
 
 var (
 	httpAddr = common.EnvString("HTTP_ADDR", ":8080")
+	OrderServiceAddr = common.EnvString("ORDER_SERVICE_ADDR", ":3000")
 )
 
 func main() {
+	conn, err := grpc.Dial(OrderServiceAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal("failed to connect to order service: ", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewOrderServiceClient(conn)
+	log.Println("Connected to order service")
+
 	router := mux.NewRouter()
-	handler := NewHandler()
+	handler := NewHandler(c)
 	handler.RegisterRoutes(router)
 
 	log.Println("starting server on", httpAddr)
