@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
@@ -17,8 +16,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	db := NewDB()
 	svc := NewService(db)
-	svc.CreateOrder(context.Background())
-	NewGRPCHandler(grpcServer)
+	NewGRPCHandler(grpcServer, svc)
 
 	log.Println("Started gRPC server on", grpcAddr)
 
@@ -32,4 +30,3 @@ func main() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }
-

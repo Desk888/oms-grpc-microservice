@@ -1,6 +1,6 @@
 module github.com/Desk888/common
 
-go 1.23.0
+go 1.21
 
 require (
 	golang.org/x/net v0.32.0 // indirect

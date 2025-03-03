@@ -1,0 +1,94 @@
+services:
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - HTTP_ADDR=:8080
+      - ORDER_SERVICE_ADDR=orders-service:2000
+      - STOCK_SERVICE_ADDR=stock-service:2001
+      - PAYMENT_SERVICE_ADDR=payments-service:2002
+      - KITCHEN_SERVICE_ADDR=kitchen-service:2003
+      - LOG_LEVEL=debug
+    depends_on:
+      - orders-service
+      - stock-service
+      - payments-service
+      - kitchen-service
+    restart: on-failure
+    networks:
+      - oms-network
+
+  orders-service:
+    build:
+      context: ./orders-service
+      dockerfile: Dockerfile
+    environment:
+      - GRPC_ADDR=:2000
+      - MONGODB_URI=mongodb://mongodb:27017/orders
+      - LOG_LEVEL=debug
+    depends_on:
+      - mongodb
+    restart: on-failure
+    networks:
+      - oms-network
+
+  stock-service:
+    build:
+      context: ./stock-service
+      dockerfile: Dockerfile
+    environment:
+      - GRPC_ADDR=:2001
+      - MONGODB_URI=mongodb://mongodb:27017/stock
+      - LOG_LEVEL=debug
+    depends_on:
+      - mongodb
+    restart: on-failure
+    networks:
+      - oms-network
+
+  payments-service:
+    build:
+      context: ./payments-service
+      dockerfile: Dockerfile
+    environment:
+      - GRPC_ADDR=:2002
+      - MONGODB_URI=mongodb://mongodb:27017/payments
+      - LOG_LEVEL=debug
+    depends_on:
+      - mongodb
+    restart: on-failure
+    networks:
+      - oms-network
+
+  kitchen-service:
+    build:
+      context: ./kitchen-service
+      dockerfile: Dockerfile
+    environment:
+      - GRPC_ADDR=:2003
+      - MONGODB_URI=mongodb://mongodb:27017/kitchen
+      - LOG_LEVEL=debug
+    depends_on:
+      - mongodb
+    restart: on-failure
+    networks:
+      - oms-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - oms-network
+
+networks:
+  oms-network:
+    driver: bridge
+
+volumes:
+  mongo-data: 

@@ -1,3 +1,3 @@
 module github.com/Desk888/oms-orders-service
 
-go 1.23.0
+go 1.21

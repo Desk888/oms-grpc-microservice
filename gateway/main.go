@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	httpAddr = common.EnvString("HTTP_ADDR", ":8080")
-	OrderServiceAddr = common.EnvString("ORDER_SERVICE_ADDR", ":3000")
+	httpAddr         = common.EnvString("HTTP_ADDR", ":8080")
+	OrderServiceAddr = common.EnvString("ORDER_SERVICE_ADDR", "localhost:2000")
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 	handler.RegisterRoutes(router)
 
 	log.Println("Starting server on", httpAddr)
-	
+
 	if err := http.ListenAndServe(httpAddr, router); err != nil {
 		log.Fatal("failed to listen and serve: ", err)
 	}
