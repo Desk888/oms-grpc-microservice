@@ -5,6 +5,7 @@ import (
 	"log"
 	"github.com/Desk888/common"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/gorilla/mux"
 )
 
 var (
@@ -12,13 +13,13 @@ var (
 )
 
 func main() {
-	mux := http.NewServeMux()
+	router := mux.NewRouter()
 	handler := NewHandler()
-	handler.RegisterRoutes(mux)
+	handler.RegisterRoutes(router)
 
 	log.Println("starting server on", httpAddr)
 	
-	if err := http.ListenAndServe(httpAddr, mux); err != nil {
+	if err := http.ListenAndServe(httpAddr, router); err != nil {
 		log.Fatal("failed to listen and serve: ", err)
 	}
-}``
+}

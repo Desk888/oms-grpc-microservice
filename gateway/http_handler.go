@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"github.com/gorilla/mux"
 )
 
 type handler struct {
@@ -12,8 +13,8 @@ func NewHandler() *handler {
 	return &handler{}
 }
 
-func (h *handler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("/api/customers/{customerID}/orders", h.HandleCreateOrder)
+func (h *handler) RegisterRoutes(r *mux.Router) {
+    r.HandleFunc("/api/customers/{customerID}/orders", h.HandleCreateOrder).Methods("POST")
 }
 
 func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
