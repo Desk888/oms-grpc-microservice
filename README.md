@@ -85,9 +85,3 @@ make dev-kitchen
 ## Environment Variables
 
 Each service has its own .env file with service-specific configuration.
-
-## Contributing
-
-1. Ensure you have protocol buffers compiler installed for development
-2. Generate protocol buffers with `make proto` after any changes to .proto files
-3. Follow Go best practices for code style 

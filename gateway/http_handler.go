@@ -1,8 +1,9 @@
 package main
 
 import (
-	"net/http"
 	"errors"
+	"net/http"
+
 	"github.com/Desk888/common"
 	pb "github.com/Desk888/common/api"
 	"github.com/gorilla/mux"
@@ -18,6 +19,7 @@ func NewHandler(client pb.OrderServiceClient) *handler {
 
 func (h *handler) RegisterRoutes(r *mux.Router) {
 	r.HandleFunc("/api/customers/{customerID}/orders", h.HandleCreateOrder).Methods("POST")
+	// Register more routes here
 }
 
 func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +29,7 @@ func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := ValidateItems(items) ; err != nil {
+	if err := ValidateItems(items); err != nil {
 		common.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -58,6 +60,5 @@ func ValidateItems(items []*pb.ItemsWithQuantity) error {
 			return errors.New("quantity must be greater than 0")
 		}
 	}
-
 	return nil
 }

@@ -35,3 +35,7 @@ message CreateOrderRequest {
 message CreateOrderResponse {
     string order_id = 1;
 }
+
+message GetOrderRequest {
+    string id = 1;
+}
