@@ -16,4 +16,5 @@ type OrdersStore interface {
 	Create(context.Context) error
 	SaveOrder(order *pb.Order) error
 	GetOrderById(id string) (*pb.Order, error)
+	DeleteOrder(id string) error
 }

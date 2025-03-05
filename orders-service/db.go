@@ -41,7 +41,7 @@ func NewDB() *db {
 		log.Fatalf("Failed to ping MongoDB: %v", err)
 	}
 
-	log.Println("Connected to MongoDB!")
+	log.Println("Connected to MongoDB")
 	collection := client.Database("orders").Collection("orders")
 
 	return &db{
@@ -132,4 +132,18 @@ func (d *db) GetOrderById(id string) (*pb.Order, error) {
 	}
 
 	return order, nil
+}
+
+func (d *db) DeleteOrder(id string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	filter := bson.M{"_id": id}
+	_, err := d.collection.DeleteOne(ctx, filter)
+	if err != nil {
+		log.Printf("Failed to delete order: %v", err)
+		return err
+	}
+
+	return nil
 }

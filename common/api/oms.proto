@@ -4,6 +4,8 @@ option go_package = "github.com/Desk888/commons/api";
 
 package api;
 
+import "google/protobuf/empty.proto";
+
 message Order {
     string id = 1;
     string customer_id = 2;
@@ -13,6 +15,8 @@ message Order {
 
 service OrderService {
     rpc CreateOrder(CreateOrderRequest) returns (Order);
+    rpc UpdateOrder(Order) returns (Order);
+    rpc DeleteOrder(DeleteOrderRequest) returns (google.protobuf.Empty);
 }
 
 message Item {
@@ -38,4 +42,8 @@ message CreateOrderResponse {
 
 message GetOrderRequest {
     string id = 1;
+}
+
+message DeleteOrderRequest {
+    string order_id = 1;
 }
